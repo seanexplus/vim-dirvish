@@ -1,25 +1,26 @@
+vim9script
 if exists('g:loaded_dirvish') || &cp || v:version < 700 || &cpo =~# 'C'
   finish
 endif
-let g:loaded_dirvish = 1
+g:loaded_dirvish = 1
 
 command! -bar -nargs=? -complete=dir Dirvish call dirvish#open(<q-args>)
 command! -nargs=* -complete=file -range -bang Shdo call dirvish#shdo(<bang>0 ? argv() : getline(<line1>, <line2>), <q-args>)
 
-func! s:isdir(dir)
+def Isdir(dir: string): bool
   if &l:bufhidden =~# '\vunload|delete|wipe'
-    return 0 " In a temporary special buffer (likely from a plugin).
+    return 0 # In a temporary special buffer (likely from a plugin).
   endif
-  return !empty(a:dir) && (isdirectory(a:dir) ||
-    \ (!empty($SYSTEMDRIVE) && isdirectory('/'.tolower($SYSTEMDRIVE[0]).a:dir)))
-endf
+  return !empty(dir) && (isdirectory(dir) ||
+    \ (!empty($SYSTEMDRIVE) && isdirectory('/' .. tolower($SYSTEMDRIVE[0]) .. dir)))
+enddef
 
 augroup dirvish
   autocmd!
-  " Remove netrw and NERDTree directory handlers.
-  autocmd VimEnter * if exists('#FileExplorer') | exe 'au! FileExplorer *' | endif
-  autocmd VimEnter * if exists('#NERDTreeHijackNetrw') | exe 'au! NERDTreeHijackNetrw *' | endif
-  autocmd BufEnter * if !exists('b:dirvish') && <SID>isdir(expand('%:p'))
+  # Remove netrw and NERDTree directory handlers.
+  autocmd VimEnter * if exists('#FileExplorer') | execute 'au! FileExplorer *' | endif
+  autocmd VimEnter * if exists('#NERDTreeHijackNetrw') | execute 'au! NERDTreeHijackNetrw *' | endif
+  autocmd BufEnter * if !exists('b:dirvish') && Isdir(expand('%:p'))
     \ | Dirvish
     \ | elseif exists('b:dirvish') && &buflisted && bufnr('$') > 1 | setlocal nobuflisted | endif
   autocmd FileType dirvish if exists('#fugitive') | call FugitiveDetect(@%) | endif
