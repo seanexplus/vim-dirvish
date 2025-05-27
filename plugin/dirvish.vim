@@ -1,11 +1,12 @@
 vim9script
+import autoload 'dirvish.vim' #  as AutoDirvish
 if exists('g:loaded_dirvish') || &cp || v:version < 700 || &cpo =~# 'C'
   finish
 endif
 g:loaded_dirvish = 1
 
-command! -bar -nargs=? -complete=dir Dirvish call dirvish#open(<q-args>)
-command! -nargs=* -complete=file -range -bang Shdo call dirvish#shdo(<bang>0 ? argv() : getline(<line1>, <line2>), <q-args>)
+command! -bar -nargs=? -complete=dir Dirvish dirvish#Open(<q-args>)
+command! -nargs=* -complete=file -range -bang Shdo dirvish#Shdo(<bang>0 ? argv() : getline(<line1>, <line2>), <q-args>)
 
 def Isdir(dir: string): bool
   if &l:bufhidden =~# '\vunload|delete|wipe'
@@ -27,9 +28,9 @@ augroup dirvish
   autocmd ShellCmdPost * if exists('b:dirvish') | Dirvish | endif
 augroup END
 
-nnoremap <silent> <Plug>(dirvish_up) :<C-U>exe 'Dirvish' fnameescape(fnamemodify(@%, ':p'.(@%[-1:]=~'[\\/]'?':h':'').repeat(':h',v:count1)))<CR>
-nnoremap <silent> <Plug>(dirvish_split_up) :<C-U>split<bar>exe 'Dirvish' fnameescape(fnamemodify(@%, ':p'.(@%[-1:]=~'[\\/]'?':h':'').repeat(':h',v:count1)))<CR>
-nnoremap <silent> <Plug>(dirvish_vsplit_up) :<C-U>vsplit<bar>exe 'Dirvish' fnameescape(fnamemodify(@%, ':p'.(@%[-1:]=~'[\\/]'?':h':'').repeat(':h',v:count1)))<CR>
+nnoremap <silent> <Plug>(dirvish_up) :<C-U>execute 'Dirvish' fnameescape(fnamemodify(@%, ':p'.(@%[-1:]=~'[\\/]'?':h':'').repeat(':h',v:count1)))<CR>
+nnoremap <silent> <Plug>(dirvish_split_up) :<C-U>split<bar>execute 'Dirvish' fnameescape(fnamemodify(@%, ':p'.(@%[-1:]=~'[\\/]'?':h':'').repeat(':h',v:count1)))<CR>
+nnoremap <silent> <Plug>(dirvish_vsplit_up) :<C-U>vsplit<bar>execute 'Dirvish' fnameescape(fnamemodify(@%, ':p'.(@%[-1:]=~'[\\/]'?':h':'').repeat(':h',v:count1)))<CR>
 
 highlight default link DirvishSuffix   SpecialKey
 highlight default link DirvishPathTail Directory
