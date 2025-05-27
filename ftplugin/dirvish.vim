@@ -35,10 +35,6 @@ if has('nvim') || has('patch-8.2.1978')
   cmdsuf = ''
 endif
 
-def Testfunc(msg: string): void
-	echom msg
-enddef
-
 execute 'nnoremap ' .. nowait .. '<buffer> ~    ' .. command_prefix .. 'Dirvish ~/<CR>' .. cmdsuf
 execute 'nnoremap ' .. nowait .. '<buffer> i    ' .. call_prefix .. 'call dirvish#Open("edit", 0)<CR>' .. cmdsuf
 execute 'nnoremap ' .. nowait .. '<buffer> <CR> ' .. call_prefix .. 'call dirvish#Open("edit", 0)<CR>' .. cmdsuf

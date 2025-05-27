@@ -542,10 +542,6 @@ def Buf_valid(bnr: any): bool
   return bufexists(bnr) && (empty(bufname(bnr)) || !isdirectory(Sl(bufname(bnr))))
 enddef
 
-export def Testfunc(msg: string): void
-	echom msg
-enddef
-
 export def Open(...args: list<any>): void
   if len(args) == 0 | return | endif
   if &autochdir
