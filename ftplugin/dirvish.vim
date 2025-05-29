@@ -1,13 +1,5 @@
 vim9script
 import autoload 'dirvish.vim' # as AutoDirvish
-try
-	call dirvish#Open()
-catch /E121/
-	echom "Error!"
-endtry
-if exists("b:did_ftplugin")
-  finish
-endif
 b:did_ftplugin = 1
 
 var nowait = (v:version > 703 ? '<nowait>' : '')
