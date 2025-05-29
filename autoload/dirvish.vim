@@ -179,7 +179,7 @@ enddef
 def Buf_init(): void
   augroup dirvish_buflocal
     autocmd! * <buffer>
-    autocmd BufEnter,WinEnter <buffer> call On_bufenter()
+    autocmd BufEnter,WinEnter <buffer> On_bufenter()
     if exists('##TextChanged')
       autocmd TextChanged,TextChangedI <buffer> if Buf_modified()
             \ && has('conceal') | execute 'setlocal conceallevel=0' | endif
@@ -189,7 +189,7 @@ def Buf_init(): void
     # 'nobuflisted'. BufDelete is _not_ fired if 'nobuflisted'.
     # NOTE: For 'nohidden' we cannot reliably handle :bdelete like this.
     if &hidden
-      autocmd BufUnload <buffer> call on_bufunload()
+      autocmd BufUnload <buffer> On_bufunload()
     endif
   augroup END
 
