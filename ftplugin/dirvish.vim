@@ -41,11 +41,11 @@ execute 'nnoremap ' .. nowait .. '<buffer><silent> <C-p> <C-\><C-n>k:call feedke
 if !has('nvim') && !has('patch-8.2.1978')
   call_prefix = ':'
 endif
-execute 'xnoremap ' .. nowait .. '<buffer> I    ' .. call_prefix .. 'call AutoDirvish.Open(<line1>, <line2>, "edit", 0)<CR>' .. cmdsuf
-execute 'xnoremap ' .. nowait .. '<buffer> <CR> ' .. call_prefix .. 'call AutoDirvish.Open(<line1>, <line2>, "edit", 0)<CR>' .. cmdsuf
-execute 'xnoremap ' .. nowait .. '<buffer> A    ' .. call_prefix .. 'call AutoDirvish.Open(<line1>, <line2>, "vsplit", 1)<CR>' .. cmdsuf
-execute 'xnoremap ' .. nowait .. '<buffer> O    ' .. call_prefix .. 'call AutoDirvish.Open(<line1>, <line2>, "split", 1)<CR>' .. cmdsuf
-execute 'xnoremap ' .. nowait .. '<buffer> P    ' .. call_prefix .. 'call AutoDirvish.Open(<line1>, <line2>, "p", 1)<CR>' .. cmdsuf
+execute 'xnoremap ' .. nowait .. '<buffer> I    ' .. call_prefix .. 'call dirvish#Open("edit", 0)<CR>' .. cmdsuf
+execute 'xnoremap ' .. nowait .. '<buffer> <CR> ' .. call_prefix .. 'call dirvish#Open("edit", 0)<CR>' .. cmdsuf
+execute 'xnoremap ' .. nowait .. '<buffer> A    ' .. call_prefix .. 'call dirvish#Open("vsplit", 1)<CR>' .. cmdsuf
+execute 'xnoremap ' .. nowait .. '<buffer> O    ' .. call_prefix .. 'call dirvish#Open("split", 1)<CR>' .. cmdsuf
+execute 'xnoremap ' .. nowait .. '<buffer> P    ' .. call_prefix .. 'call dirvish#Open("p", 1)<CR>' .. cmdsuf
 
 nnoremap <buffer><silent> R :<C-U><C-R>=v:count ? ': g:dirvish_mode=' .. v:count .. '<Bar>' : ''<CR>Dirvish<CR>
 nnoremap <buffer><silent>   g?    :help dirvish-mappings<CR>
