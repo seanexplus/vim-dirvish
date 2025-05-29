@@ -256,8 +256,8 @@ def Buf_close(): void
 
   var [altbuf, prevbuf] = [get(d, 'altbuf', 0), get(d, 'prevbuf', 0)]
   Log(printf('buf_close: bufnr=%d altbuf=%d prevbuf=%d', bufnr(''), altbuf, prevbuf))
-  var found_alt = try_visit(altbuf, 0)
-  if !try_visit(prevbuf, 0) && !found_alt
+  var found_alt = Try_visit(altbuf, 0)
+  if !Try_visit(prevbuf, 0) && !found_alt
       \ && (1 == bufnr('%') || (prevbuf != bufnr('%') && altbuf != bufnr('%')))
     bdelete
   endif
@@ -288,7 +288,7 @@ def Open_selected(splitcmd: string, bg: number, line1: number, line2: number): v
     var shortname = fnamemodify(path, isdir ? ':p:~' : ':~:.')
 
     if p  # Go to previous window.
-      execute (winnr('$') > 1 ? 'wincmd p|if winnr()==' .. winnr() .. '|wincmd w|endif' : 'vsplit')
+      execute (winnr('$') > 1 ? 'wincmd p | if winnr() == ' .. winnr() .. ' | wincmd w | endif' : 'vsplit')
     endif
 
     if isdir
