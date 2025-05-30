@@ -389,7 +389,7 @@ def Buf_render(dir: string, lastpath: string): void
   endif
 
   if !isnew
-    Bufwin_do('let w:dirvish["_view"] = winsaveview()', bnr)
+    Bufwin_do('w:dirvish["_view"] = winsaveview()', bnr)
   endif
 
   if v:version > 704 || v:version == 704 && has("patch73")
