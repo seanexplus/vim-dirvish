@@ -131,27 +131,27 @@ enddef
 
 export def Shdo(paths: list<string>, cmd: string): void
   # Remove empty/duplicate lines.
-  var lines = uniq(sort(filter(copy(paths), '-1!=match(v:val,"\\S")')))
-  var head = fnamemodify(get(lines, 0, '')[:-2], ':h')
-  var jagged = 0 != len(filter(copy(lines), 'head != fnamemodify(v:val[:-2], ":h")'))
+  var lines = uniq(sort(filter(copy(paths), '-1 != match(v:val, "\\S")')))
+  var head = fnamemodify(get(lines, 0, '')[: -2], ':h')
+  var jagged = 0 != len(filter(copy(lines), (idx, val) => head != fnamemodify(val[: -2], ":h")))
   if empty(lines) | Msg_error('Shdo: no files') | return | endif
 
   var dirvish_bufnr = bufnr('%')
-  var cmd = cmd =~# '\V{}' ? cmd : (empty(cmd)?'{}':(cmd.' {}')) # DWIM
+  var tcmd = cmd =~# '\V{}' ? cmd : (empty(cmd) ? '{}' : (cmd .. ' {}')) # DWIM
   # Paths from argv() or non-dirvish buffers may be jagged; assume CWD then.
   var dir = jagged ? getcwd() : head
-  var tmpfile = tempname().(&sh=~?'cmd.exe'?'.bat':(&sh=~'\(powershell\|pwsh\)'?'.ps1':'.sh'))
+  var tmpfile = tempname() .. (&sh =~? 'cmd.exe' ? '.bat' : (&sh =~ '\(powershell\|pwsh\)' ? '.ps1' : '.sh'))
 
-  for i in range(0, len(lines)-1)
-    var f = substitute(lines[i], escape(sep,'\').'$', '', 'g') "trim slash
+  for i in range(0, len(lines) - 1)
+    var f = substitute(lines[i], escape(sep, '\') .. '$', '', 'g') # trim slash
     if !filereadable(f) && !isdirectory(f)
-      var lines[i] = '#invalid path: ' .. shellescape(f)
+      lines[i] = '#invalid path: ' .. shellescape(f)
       continue
     endif
-    var f = !jagged && 2==exists(':lcd') ? fnamemodify(f, ':t') : lines[i]
-    var lines[i] = substitute(cmd, '\V{}', escape(shellescape(f),'&\'), 'g')
+    f = !jagged && 2 == exists(':lcd') ? fnamemodify(f, ':t') : lines[i]
+    lines[i] = substitute(tcmd, '\V{}', escape(shellescape(f), '&\'), 'g')
   endfor
-  execute 'silent split' tmpfile '|' (2==exists(':lcd')?('lcd ' .. dir):'')
+  execute 'silent split' tmpfile '|' (2 == exists(':lcd') ? ('lcd ' .. dir) : '')
   setlocal bufhidden=wipe
   silent keepmarks keepjumps setline(1, lines)
   silent write
@@ -163,12 +163,12 @@ export def Shdo(paths: list<string>, cmd: string): void
   augroup dirvish_shcmd
     autocmd! * <buffer>
     # Refresh Dirvish after executing a shell command.
-    exe 'autocmd ShellCmdPost <buffer> nested if !v:shell_error && bufexists(' .. dirvish_bufnr .. ')'
-      .. '|setlocal bufhidden=hide|buffer ' .. dirvish_bufnr .. '|silent! Dirvish'
-      .. '|buffer ' .. bufnr('%') .. '|setlocal bufhidden=wipe|endif'
+    execute 'autocmd ShellCmdPost <buffer> ++nested if !v:shell_error && bufexists(' .. dirvish_bufnr .. ')'
+      .. ' | setlocal bufhidden=hide | buffer ' .. dirvish_bufnr .. ' | silent! Dirvish'
+      .. ' | buffer ' .. bufnr('%') .. ' | setlocal bufhidden=wipe | endif'
   augroup END
 
-  nnoremap <buffer><silent> Z! :silent write<Bar>exe '!' .. (has('win32') ? fnameescape(escape(expand('%:p:gs?\\?/?'), '&\')):join(map(split(&shell), 'shellescape(v:val)')) .. ' %')<Bar>if !v:shell_error<Bar>close<Bar>endif<CR>
+  nnoremap <buffer><silent> Z! :silent write<Bar>execute '!' .. (has('win32') ? fnameescape(escape(expand('%:p:gs?\\?/?'), '&\')) : join(map(split(&shell), 'shellescape(v:val)')) .. ' %')<Bar>if !v:shell_error<Bar>close<Bar>endif<CR>
 enddef
 
 # Returns true if the buffer was modified by the user.
