@@ -1,6 +1,6 @@
 vim9script
 var srcdir = expand('<sfile>:h:h:p')
-var sep = stridx(fnamemodify('.', ':p'), '\') >= 0 ? '\' : '/'
+var sep = has('win32') && stridx(fnamemodify('.', ':p'), '\') >= 0 ? '\' : '/'
 var noswapfile = (2 == exists(':noswapfile')) ? 'noswapfile' : ''
 var noau       = 'silent noautocmd keepjumps'
 var cb_map = {}   # callback map

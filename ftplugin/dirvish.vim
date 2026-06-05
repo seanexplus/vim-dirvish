@@ -3,7 +3,7 @@ import autoload 'dirvish.vim' # as AutoDirvish
 b:did_ftplugin = 1
 
 var nowait = (v:version > 703 ? '<nowait>' : '')
-var sep = stridx(fnamemodify('.', ':p'), '\') >= 0 ? '\' : '/'
+var sep = has('win32') && stridx(fnamemodify('.', ':p'), '\') >= 0 ? '\' : '/'
 
 if !hasmapto('<Plug>(dirvish_quit)', 'n')
   execute 'nmap ' .. nowait .. '<buffer> q <Plug>(dirvish_quit)'

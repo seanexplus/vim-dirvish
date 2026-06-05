@@ -3,7 +3,7 @@ if 'dirvish' !=# get(b:, 'current_syntax', 'dirvish')
   finish
 endif
 
-var sep = stridx(fnamemodify('.', ':p'), '\') >= 0 ? '\\' : '/'
+var sep = has('win32') && stridx(fnamemodify('.', ':p'), '\') >= 0 ? '\\' : '/'
 var escape = 'substitute(escape(v:val, ".$~"), "*", ".*", "g")'
 
 # Define once (per buffer).
