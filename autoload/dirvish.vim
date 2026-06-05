@@ -410,7 +410,7 @@ def Buf_render(dir: string, lastpath: string): void
 
   if !empty(lastpath)
     var pat = tr(F(lastpath), '/', sep)  # platform slashes
-    search('\V\^' .. escape(pat, '\') .. '\$', 'cw')
+    search('\V\C\^' .. escape(pat, '\') .. '\$', 'cw')
   endif
   # Place cursor on the tail (last path segment).
   search('\' .. sep .. '\zs[^\' .. sep .. ']\+\' .. sep .. '\?$', 'c', line('.'))
