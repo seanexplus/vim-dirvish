@@ -115,9 +115,11 @@ def Set_args(args: list<string>): void
   endif
   var normalized_argv = map(argv(), 'fnamemodify(v:val, ":p")')
   for f in args
-    var i = index(normalized_argv, f)
+	var normalized_f = fnamemodify(f,':p')
+    var i = index(normalized_argv, normalized_f)
+
     if -1 == i
-      execute '$argadd '.. fnameescape(fnamemodify(f, ':p'))
+      execute '$argadd '.. fnameescape(normalized_f)
     elseif 1 == len(args)
       execute (i+1) .. 'argdelete'
       syntax clear DirvishArg

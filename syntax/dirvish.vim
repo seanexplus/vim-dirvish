@@ -15,8 +15,10 @@ endif
 
 # Define (again) ..  Other windows (different arglists) need the old definitions .. 
 # Do these last, else they may be overridden (see :h syn-priority) .. 
+var rel = exists('g:dirvish_relative_paths')
 for p in argv()
-  execute 'syntax match DirvishArg ,' .. escape(fnamemodify(p, ':p'), '[,* .. ^$~\') .. '$, contains=DirvishPathHead'
+  var f = rel ? fnamemodify(p, ':p:.') : fnamemodify(p, ':p')
+  execute 'syntax match DirvishArg ,' .. escape(f, '[,* .. ^$~\') .. '$, contains=DirvishPathHead'
 endfor
 
 b:current_syntax = 'dirvish'
