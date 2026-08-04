@@ -173,6 +173,11 @@ export def Shdo(paths: list<string>, cmd: string): void
   augroup END
 
   nnoremap <buffer><silent> Z! :silent write<Bar>execute '!' .. (has('win32') ? fnameescape(escape(expand('%:p:gs?\\?/?'), '&\')) : join(map(split(&shell), 'shellescape(v:val)')) .. ' %')<Bar>if !v:shell_error<Bar>close<Bar>endif<CR>
+  var dirvish_dir = escape(shellescape(head), '&\')
+
+  if exists("#User#DirvishShdo")
+	doautocmd <nomodeline> User DirvishShdo
+  endif
 enddef
 
 # Returns true if the buffer was modified by the user.
